@@ -36,7 +36,7 @@ public class SwaggerConfig {
 
     @Bean
     public OpenAPI customOpenApi() {
-        if (!StringUtils.isEmpty(profile) && !"prd".equals(profile)) {
+        if (!StringUtils.isEmpty(profile) && !"prd".equals(profile) && !"default".equals(profile)) {
             defaultServerUrl += "/" + profile;
         }
         return new OpenAPI()
