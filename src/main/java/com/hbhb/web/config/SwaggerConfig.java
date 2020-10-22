@@ -8,6 +8,7 @@ import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.servers.Server;
 
 /**
  * @author xiaokang
@@ -22,10 +23,13 @@ public class SwaggerConfig {
     private String version;
     @Value("${springdoc.description}")
     private String description;
+    @Value("${springdoc.server-url}")
+    private String defaultServerUrl;
 
     @Bean
     public OpenAPI customOpenApi() {
         return new OpenAPI()
+                .addServersItem(new Server().url(defaultServerUrl))
                 .components(new Components().addSecuritySchemes("bearer-key", new SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("bearer").bearerFormat("JWT")))
                 .info(new Info()
                         .title(title)
