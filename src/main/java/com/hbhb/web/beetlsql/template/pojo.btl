@@ -1,0 +1,34 @@
+package ${package};
+
+import java.io.Serializable;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+/**
+ * @since ${date(),"yyyy-MM-dd"}
+ */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class ${className} implements java.io.Serializable {
+	<%
+    for(attr in attrs){
+    if(!isEmpty(attr.comment)){%>
+    /**
+     * ${attr.comment}
+     */
+    <%}
+    if(attr.id&&attr.autoId){
+    %>
+    @AutoId
+    <%
+    }else if(attr.id){
+    %>
+    @AssingId()
+    <%}%>
+    private ${attr.javaType} ${attr.name};
+    <%}%>
+}

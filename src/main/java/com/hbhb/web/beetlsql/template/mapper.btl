@@ -1,0 +1,10 @@
+package ${package};
+
+import com.hbhb.web.beetlsql.BaseMapper;
+
+/**
+ * @since ${date(),"yyyy-MM-dd"}
+ */
+public interface ${className} extends BaseMapper<${entityClass}> {
+	
+}
