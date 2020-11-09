@@ -78,7 +78,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BusinessException.class)
     private ApiResult handleBusinessException(BusinessException e) {
-        outPutError(BusinessException.class, ResultCode.BUSINESS_ERROR, e);
         return ApiResult.error(e.getCode(), e.getMessage());
     }
 
