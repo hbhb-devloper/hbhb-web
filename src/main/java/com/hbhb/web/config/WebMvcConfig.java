@@ -1,5 +1,6 @@
 package com.hbhb.web.config;
 
+import com.hbhb.web.resolver.DecodeArgumentResolver;
 import com.hbhb.web.resolver.UserIdArgumentResolver;
 
 import org.springframework.context.annotation.Configuration;
@@ -19,9 +20,12 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Resource
     private UserIdArgumentResolver userIdArgumentResolver;
+    @Resource
+    private DecodeArgumentResolver decodeArgumentResolver;
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
         resolvers.add(userIdArgumentResolver);
+        resolvers.add(decodeArgumentResolver);
     }
 }
