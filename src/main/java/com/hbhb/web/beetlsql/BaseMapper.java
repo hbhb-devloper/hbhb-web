@@ -61,7 +61,7 @@ public interface BaseMapper<T> {
     boolean upsert(T entity);
 
     @AutoMapper(UpsertByTemplateAMI.class)
-    int upsertByTemplate(T entity);
+    boolean upsertByTemplate(T entity);
 
     @AutoMapper(DeleteByIdAMI.class)
     int deleteById(Object key);
