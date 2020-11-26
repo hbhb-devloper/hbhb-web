@@ -31,7 +31,7 @@ public class SwaggerConfig {
     private String description;
     @Value("${springdoc.server-url}")
     private String defaultServerUrl;
-    @Value("${springdoc.oAuthFlow.tokenUrl}")
+    @Value("${springdoc.oauth-flow.token-url}")
     private String tokenUrl;
     @Value("${spring.profiles.active}")
     private String profile;
