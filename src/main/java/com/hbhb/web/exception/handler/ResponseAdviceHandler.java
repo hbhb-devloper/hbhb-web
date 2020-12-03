@@ -1,9 +1,6 @@
 package com.hbhb.web.exception.handler;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hbhb.core.bean.ApiResult;
-import com.hbhb.core.enums.ResultCode;
 
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
@@ -22,6 +19,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 import java.lang.reflect.AnnotatedElement;
 import java.util.Arrays;
 
+import io.swagger.v3.oas.annotations.Operation;
+
 /**
  * 全局响应参数处理类（在gateway中失效）
  *
@@ -39,7 +38,8 @@ public class ResponseAdviceHandler implements ResponseBodyAdvice<Object> {
             GetMapping.class,
             PostMapping.class,
             PutMapping.class,
-            DeleteMapping.class
+            DeleteMapping.class,
+            Operation.class
     };
 
     @Override
