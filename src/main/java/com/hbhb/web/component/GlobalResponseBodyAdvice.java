@@ -1,4 +1,4 @@
-package com.hbhb.web.exception.handler;
+package com.hbhb.web.component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -29,7 +29,7 @@ import io.swagger.v3.oas.annotations.Operation;
  */
 @RestControllerAdvice
 @SuppressWarnings(value = {"all"})
-public class ResponseAdviceHandler implements ResponseBodyAdvice<Object> {
+public class GlobalResponseBodyAdvice implements ResponseBodyAdvice<Object> {
 
     private final ThreadLocal<ObjectMapper> mapperThreadLocal = ThreadLocal.withInitial(ObjectMapper::new);
 

@@ -1,4 +1,4 @@
-package com.hbhb.web.exception.handler;
+package com.hbhb.web.component;
 
 import com.hbhb.core.bean.ApiResult;
 import com.hbhb.core.enums.ResultCode;
