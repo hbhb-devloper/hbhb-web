@@ -1,6 +1,5 @@
 # Auto Configure
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 com.hbhb.web.config.CorsConfig, \
-com.hbhb.web.config.DataSourceConfig, \
 com.hbhb.web.config.SwaggerConfig, \
 com.hbhb.web.config.WebMvcConfig
