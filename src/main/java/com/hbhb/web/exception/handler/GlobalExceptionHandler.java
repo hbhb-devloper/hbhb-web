@@ -62,23 +62,25 @@ public class GlobalExceptionHandler {
         return ApiResult.error(ResultCode.UNSUPPORTED_MEDIA_TYPE);
     }
 
-    @ExceptionHandler(value = Exception.class)
-    public ApiResult handleException(Exception e) {
-        if (e instanceof ClientException) {
-            outPutError(ClientException.class, ResultCode.RPC_ERROR, e);
-            return ApiResult.error(ResultCode.RPC_ERROR);
-        } else if (e instanceof FeignException) {
-            outPutError(FeignException.class, ResultCode.RPC_ERROR, e);
-            return ApiResult.error(ResultCode.RPC_ERROR);
-        } else {
-            outPutError(Exception.class, ResultCode.EXCEPTION, e);
-            return ApiResult.error(ResultCode.EXCEPTION);
-        }
-    }
-
+    /**
+     * 自定义异常
+     */
     @ExceptionHandler(BusinessException.class)
     private ApiResult handleBusinessException(BusinessException e) {
         return ApiResult.error(e.getCode(), e.getMessage());
+    }
+
+    @ExceptionHandler(value = Exception.class)
+    public ApiResult handleException(Exception e) {
+        if (e instanceof ClientException) {
+            return ApiResult.error(ResultCode.RPC_ERROR);
+        } else if (e instanceof FeignException) {
+            return ApiResult.error(ResultCode.RPC_ERROR);
+        } else if (e.getCause() instanceof BusinessException) {
+            return ApiResult.error(((BusinessException) e.getCause()).getCode(), e.getMessage());
+        } else {
+            return ApiResult.error(ResultCode.EXCEPTION);
+        }
     }
 
     /**
