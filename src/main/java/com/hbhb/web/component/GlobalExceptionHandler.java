@@ -79,6 +79,7 @@ public class GlobalExceptionHandler {
         } else if (e.getCause() instanceof BusinessException) {
             return ApiResult.error(((BusinessException) e.getCause()).getCode(), e.getMessage());
         } else {
+            outPutError(Exception.class, ResultCode.EXCEPTION, e);
             return ApiResult.error(ResultCode.EXCEPTION);
         }
     }
