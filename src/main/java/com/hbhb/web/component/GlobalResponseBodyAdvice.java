@@ -33,7 +33,10 @@ public class GlobalResponseBodyAdvice implements ResponseBodyAdvice<Object> {
 
     private final ThreadLocal<ObjectMapper> mapperThreadLocal = ThreadLocal.withInitial(ObjectMapper::new);
 
-    private static final Class[] annoys = {
+    /**
+     * 标注了以下注解，则需要进行全局响应体处理
+     */
+    private static final Class[] ANNOYS = {
             RequestMapping.class,
             GetMapping.class,
             PostMapping.class,
@@ -42,10 +45,17 @@ public class GlobalResponseBodyAdvice implements ResponseBodyAdvice<Object> {
             Operation.class
     };
 
+    /**
+     * 不需要做响应体处理的url白名单
+     */
+    private static final String[] EXCLUDE_PATH = {
+            "/download"
+    };
+
     @Override
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> aClass) {
         AnnotatedElement element = returnType.getAnnotatedElement();
-        return Arrays.stream(annoys).anyMatch(annoy -> annoy.isAnnotation() && element.isAnnotationPresent(annoy));
+        return Arrays.stream(ANNOYS).anyMatch(annoy -> annoy.isAnnotation() && element.isAnnotationPresent(annoy));
     }
 
     @Override
@@ -57,7 +67,11 @@ public class GlobalResponseBodyAdvice implements ResponseBodyAdvice<Object> {
                                   ServerHttpResponse response) {
         Object out;
         ObjectMapper mapper = mapperThreadLocal.get();
-        response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
+        // 网关已设置只对application/json的类型进行响应体封装
+        if (Arrays.stream(EXCLUDE_PATH).noneMatch(request.getURI().getPath()::contains)) {
+            response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
+        }
+        // 加了网关后，下列代码不适用
 //        if (body instanceof ApiResult) {
 //            out = body;
 //        } else if (body instanceof String) {
