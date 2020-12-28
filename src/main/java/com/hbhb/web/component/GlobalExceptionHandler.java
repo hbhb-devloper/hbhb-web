@@ -73,10 +73,13 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = Exception.class)
     public ApiResult handleException(Exception e) {
         if (e instanceof ClientException) {
+            outPutError(ClientException.class, ResultCode.EXCEPTION, e);
             return ApiResult.error(ResultCode.RPC_ERROR);
         } else if (e instanceof FeignException) {
+            outPutError(FeignException.class, ResultCode.EXCEPTION, e);
             return ApiResult.error(ResultCode.RPC_ERROR);
         } else if (e.getCause() instanceof BusinessException) {
+            outPutError(BusinessException.class, ResultCode.EXCEPTION, e);
             return ApiResult.error(((BusinessException) e.getCause()).getCode(), e.getMessage());
         } else {
             outPutError(Exception.class, ResultCode.EXCEPTION, e);
