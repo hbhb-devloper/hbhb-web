@@ -3,7 +3,6 @@ package com.hbhb.web.util;
 import com.hbhb.api.core.bean.FileVO;
 import com.hbhb.core.utils.NumberUtil;
 
-import org.springframework.http.MediaType;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,7 +16,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -28,6 +29,18 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class FileUtil {
+
+    private static final Map<String, String> MIME_TYPE_MAP = new HashMap<>();
+
+    static {
+        MIME_TYPE_MAP.put(".doc", "application/msword");
+        MIME_TYPE_MAP.put(".docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+        MIME_TYPE_MAP.put(".xls", "application/vnd.ms-excel");
+        MIME_TYPE_MAP.put(".xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        MIME_TYPE_MAP.put(".jpg", "image/jpeg");
+        MIME_TYPE_MAP.put(".jpeg", "image/jpeg");
+        MIME_TYPE_MAP.put(".png", "image/png");
+    }
 
     /**
      * 上传多个文件
@@ -97,11 +110,15 @@ public class FileUtil {
 
     public static void download(HttpServletResponse response, String filePath, Boolean deleteFile) {
         File file = new File(filePath);
+        String fileName = getFileName(filePath);
         try {
             InputStream in = new FileInputStream(file);
+            String mimeType = MIME_TYPE_MAP.get(getSuffix(fileName));
+            if (!StringUtils.isEmpty(mimeType)) {
+                response.setContentType(mimeType);
+            }
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-            response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
-            response.setHeader("Content-disposition", "attachment;filename=" + getFileName(filePath));
+            response.setHeader("Content-disposition", "attachment;filename=" + fileName);
             BufferedOutputStream out = new BufferedOutputStream(response.getOutputStream());
             // 读取文件流
             int len;
@@ -147,7 +164,10 @@ public class FileUtil {
         file.delete();
     }
 
-    private static int getFileMax(String filePath, String fileName) {
+    /**
+     * 查询文件目录下指定名称的文件个数
+     */
+    public static int getFileMax(String filePath, String fileName) {
         File file = new File(filePath);
         File[] files;
         int number = 0;
@@ -167,6 +187,9 @@ public class FileUtil {
         return number;
     }
 
+    /**
+     * 转换文件大小为(KB、MB、GB)单位
+     */
     public static String getLength(long filesize) {
         int byteLen = 1024;
         if (filesize < byteLen) {
@@ -178,5 +201,16 @@ public class FileUtil {
         } else {
             return NumberUtil.format(((double) filesize) / (byteLen * byteLen * byteLen)) + "GB";
         }
+    }
+
+    /**
+     * 获取文件后缀名
+     */
+    public static String getSuffix(String fileName) {
+        int i = fileName.lastIndexOf('.');
+        if (i > 0) {
+            return "." + fileName.substring(i + 1);
+        }
+        return null;
     }
 }

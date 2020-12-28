@@ -1,7 +1,5 @@
 package com.hbhb.web.component;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -31,7 +29,7 @@ import io.swagger.v3.oas.annotations.Operation;
 @SuppressWarnings(value = {"all"})
 public class GlobalResponseBodyAdvice implements ResponseBodyAdvice<Object> {
 
-    private final ThreadLocal<ObjectMapper> mapperThreadLocal = ThreadLocal.withInitial(ObjectMapper::new);
+//    private final ThreadLocal<ObjectMapper> mapperThreadLocal = ThreadLocal.withInitial(ObjectMapper::new);
 
     /**
      * 标注了以下注解，则需要进行全局响应体处理
@@ -65,8 +63,8 @@ public class GlobalResponseBodyAdvice implements ResponseBodyAdvice<Object> {
                                   Class<? extends HttpMessageConverter<?>> aClass,
                                   ServerHttpRequest request,
                                   ServerHttpResponse response) {
-        Object out;
-        ObjectMapper mapper = mapperThreadLocal.get();
+//        Object out;
+//        ObjectMapper mapper = mapperThreadLocal.get();
         // 网关已设置只对application/json的类型进行响应体封装
         if (Arrays.stream(EXCLUDE_PATH).noneMatch(request.getURI().getPath()::contains)) {
             response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
